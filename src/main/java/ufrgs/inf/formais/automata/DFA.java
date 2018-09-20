@@ -6,17 +6,9 @@ import java.util.List;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
-public class DFA {
+public class DFA extends Automaton{
 	
-	private String name;
-	
-	private HashSet<String> alphabet;
-	
-	private HashSet<String> states;
-	
-	private String initialState;
-	
-	private HashSet<String> finalStates;
+	protected String type = "Deterministic Finite Automaton";
 	
 	private HashMap<ImmutablePair<String, String>, String> transitionFunction;
 	
@@ -38,44 +30,8 @@ public class DFA {
 		this.transitionFunction = transitionFunction;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public HashSet<String> getAlphabet() {
-		return alphabet;
-	}
-
-	public void setAlphabet(HashSet<String> alphabet) {
-		this.alphabet = alphabet;
-	}
-
-	public HashSet<String> getStates() {
-		return states;
-	}
-
-	public void setStates(HashSet<String> states) {
-		this.states = states;
-	}
-
-	public String getInitialState() {
-		return initialState;
-	}
-
-	public void setInitialState(String initialState) {
-		this.initialState = initialState;
-	}
-
-	public HashSet<String> getFinalStates() {
-		return finalStates;
-	}
-
-	public void setFinalStates(HashSet<String> finalStates) {
-		this.finalStates = finalStates;
+	public String getType() {
+		return type;
 	}
 
 	public HashMap<ImmutablePair<String, String>, String> getTransitionFunction() {
@@ -104,6 +60,12 @@ public class DFA {
 		}
 		
 		return (finalStates.contains(state)) ? true : false ;
+	}
+	
+	public String stringifyTransitionFunction() {
+		StringBuilder sb = new StringBuilder();
+		
+		return sb.toString();
 	}
 	
 
