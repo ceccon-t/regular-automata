@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
+import ufrgs.inf.formais.helper.Tuple;
 
 public class DFA extends Automaton{
 	
 	protected String type = "Deterministic Finite Automaton";
 	
-	private HashMap<ImmutablePair<String, String>, String> transitionFunction;
+	private HashMap<Tuple, String> transitionFunction;
 	
 	public DFA() {
 		
@@ -21,7 +21,7 @@ public class DFA extends Automaton{
 			HashSet<String> states, 
 			String initialState, 
 			HashSet<String> finalStates,
-			HashMap<ImmutablePair<String, String>, String> transitionFunction) {
+			HashMap<Tuple, String> transitionFunction) {
 		this.name = name;
 		this.alphabet = alphabet;
 		this.states = states;
@@ -34,11 +34,11 @@ public class DFA extends Automaton{
 		return type;
 	}
 
-	public HashMap<ImmutablePair<String, String>, String> getTransitionFunction() {
+	public HashMap<Tuple, String> getTransitionFunction() {
 		return transitionFunction;
 	}
 
-	public void setTransitionFunction(HashMap<ImmutablePair<String, String>, String> transitionFunction) {
+	public void setTransitionFunction(HashMap<Tuple, String> transitionFunction) {
 		this.transitionFunction = transitionFunction;
 	}
 	
@@ -48,7 +48,7 @@ public class DFA extends Automaton{
 		int pos = 0;
 		
 		while (pos < word.size()) {
-			ImmutablePair<String, String> transition = new ImmutablePair<String, String>(state, word.get(pos));
+			Tuple transition = new Tuple(state, word.get(pos));
 			
 			if (!transitionFunction.containsKey(transition)) {
 				return false;

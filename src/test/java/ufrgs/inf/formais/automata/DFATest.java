@@ -1,9 +1,10 @@
 package ufrgs.inf.formais.automata;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import ufrgs.inf.formais.helper.Tuple;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -65,11 +66,11 @@ public class DFATest {
 		String initialState = "q0";
 		HashSet<String> finalStates = new HashSet<String>();
 		finalStates.add("q1");
-		HashMap<ImmutablePair<String, String>, String> transitionFunction = new HashMap<ImmutablePair<String, String>, String>();
-		transitionFunction.put(new ImmutablePair("q0", "a"), "q1");
-		transitionFunction.put(new ImmutablePair("q0", "b"), "q0");
-		transitionFunction.put(new ImmutablePair("q1", "a"), "q1");
-		transitionFunction.put(new ImmutablePair("q1", "b"), "q0");
+		HashMap<Tuple, String> transitionFunction = new HashMap<Tuple, String>();
+		transitionFunction.put(new Tuple("q0", "a"), "q1");
+		transitionFunction.put(new Tuple("q0", "b"), "q0");
+		transitionFunction.put(new Tuple("q1", "a"), "q1");
+		transitionFunction.put(new Tuple("q1", "b"), "q0");
 		
 		return new DFA(name, alphabet, states, initialState, finalStates, transitionFunction);
 	}
