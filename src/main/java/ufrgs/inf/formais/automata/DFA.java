@@ -3,6 +3,7 @@ package ufrgs.inf.formais.automata;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import ufrgs.inf.formais.helper.Tuple;
 import ufrgs.inf.formais.helper.Word;
@@ -69,6 +70,14 @@ public class DFA extends Automaton{
 	
 	public String stringifyTransitionFunction() {
 		StringBuilder sb = new StringBuilder();
+		
+		sb.append("\n- Transition function: \n");
+		for (Map.Entry<Tuple, String> transition : transitionFunction.entrySet()) {
+			Tuple key = transition.getKey();
+			String destiny = transition.getValue();
+			sb.append("( " + key.getLeft() + " , " + key.getRight() + " ) => " + destiny + "\n");
+		}
+		sb.append("\n-End of transition function-\n");
 		
 		return sb.toString();
 	}

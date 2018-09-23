@@ -10,10 +10,8 @@ import ufrgs.inf.formais.helper.Word;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 
 
 public class DFATest {
