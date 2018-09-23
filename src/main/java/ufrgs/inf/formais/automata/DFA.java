@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import ufrgs.inf.formais.helper.Tuple;
+import ufrgs.inf.formais.helper.Word;
 
 public class DFA extends Automaton{
 	
@@ -60,6 +61,10 @@ public class DFA extends Automaton{
 		}
 		
 		return (finalStates.contains(state)) ? true : false ;
+	}
+	
+	public boolean recognize(Word word) {
+		return this.recognize(word.getSequence());
 	}
 	
 	public String stringifyTransitionFunction() {

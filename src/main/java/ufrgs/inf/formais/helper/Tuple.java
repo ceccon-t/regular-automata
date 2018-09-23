@@ -24,14 +24,6 @@ public class Tuple {
 	
 	@Override
 	public boolean equals(Object o) {
-		/*
-		if (o instanceof Tuple) {
-			return this.pair.equals( ((Tuple) o).getPair() );
-		} else {
-			return false;
-		}
-		*/
-		
 		return (o instanceof Tuple) ? this.pair.equals( ( (Tuple) o).getPair() ) : false ;
 	}
 	

@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ufrgs.inf.formais.helper.Tuple;
+import ufrgs.inf.formais.helper.Word;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -30,14 +31,7 @@ public class DFATest {
 	@Test
 	public void recognizeWordsThatEndWithA() {
 		DFA automaton = dfaEndsWithA();
-		List<String> word = new ArrayList<String>();
-		word.add("a");
-		word.add("b");
-		word.add("a");
-		word.add("b");
-		word.add("a");
-		word.add("b");
-		word.add("a");
+		Word word = new Word(new String[] {"a", "b", "a", "b", "a", "b", "a"});
 		
 		assertTrue(automaton.recognize(word));
 	}
@@ -45,12 +39,7 @@ public class DFATest {
 	@Test
 	public void doesNotRecognizeWordsThatDoNotEndWithA() {
 		DFA automaton = dfaEndsWithA();
-		List<String> word = new ArrayList<String>();
-		word.add("a");
-		word.add("a");
-		word.add("b");
-		word.add("a");
-		word.add("b");
+		Word word = new Word(new String[] {"a", "a", "b", "a", "b"});
 		
 		assertFalse(automaton.recognize(word));
 	}
