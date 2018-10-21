@@ -2,6 +2,8 @@ package ufrgs.inf.formais.automata;
 
 import java.util.HashSet;
 
+import ufrgs.inf.formais.helper.Symbol;
+
 
 public abstract class Automaton {
 
@@ -9,7 +11,7 @@ public abstract class Automaton {
 	
 	protected String name;
 	
-	protected HashSet<String> alphabet;
+	protected HashSet<Symbol> alphabet;
 	
 	protected HashSet<String> states;
 	
@@ -29,11 +31,11 @@ public abstract class Automaton {
 		this.name = name;
 	}
 
-	public HashSet<String> getAlphabet() {
+	public HashSet<Symbol> getAlphabet() {
 		return alphabet;
 	}
 
-	public void setAlphabet(HashSet<String> alphabet) {
+	public void setAlphabet(HashSet<Symbol> alphabet) {
 		this.alphabet = alphabet;
 	}
 
@@ -72,7 +74,7 @@ public abstract class Automaton {
 		
 		// Alphabet
 		sb.append("Alphabet:");
-		for (String symbol : this.getAlphabet()) {
+		for (Symbol symbol : this.getAlphabet()) {
 			sb.append(" '" + symbol + "'");
 		} 
 		sb.append("\n");

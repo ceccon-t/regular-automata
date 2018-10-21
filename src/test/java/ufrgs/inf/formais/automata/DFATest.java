@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import ufrgs.inf.formais.helper.Symbol;
 import ufrgs.inf.formais.helper.Tuple;
 import ufrgs.inf.formais.helper.Word;
 
@@ -44,9 +45,9 @@ public class DFATest {
 	
 	private DFA dfaEndsWithA() {
 		String name = "Ends With A";
-		HashSet<String> alphabet = new HashSet<String>();
-		alphabet.add("a");
-		alphabet.add("b");
+		HashSet<Symbol> alphabet = new HashSet<Symbol>();
+		alphabet.add(new Symbol("a"));
+		alphabet.add(new Symbol("b"));
 		HashSet<String> states = new HashSet<String>();
 		states.add("q0");
 		states.add("q1");

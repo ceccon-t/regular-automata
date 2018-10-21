@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import ufrgs.inf.formais.helper.Symbol;
 import ufrgs.inf.formais.helper.Tuple;
 import ufrgs.inf.formais.helper.Word;
 
@@ -19,7 +20,7 @@ public class DFA extends Automaton{
 	}
 	
 	public DFA(String name, 
-			HashSet<String> alphabet,
+			HashSet<Symbol> alphabet,
 			HashSet<String> states, 
 			String initialState, 
 			HashSet<String> finalStates,
