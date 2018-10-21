@@ -5,16 +5,16 @@ import java.util.List;
 
 public class Word {
 	
-	private List<String> sequence;
+	private List<Symbol> sequence;
 	
-	public Word(String[] symbols) {
-		sequence = new ArrayList<String>(symbols.length);
-		for (String symbol : symbols) {
+	public Word(Symbol[] symbols) {
+		sequence = new ArrayList<Symbol>(symbols.length);
+		for (Symbol symbol : symbols) {
 			sequence.add(symbol);
 		}
 	}
 
-	public List<String> getSequence() {
+	public List<Symbol> getSequence() {
 		return sequence;
 	}
 	

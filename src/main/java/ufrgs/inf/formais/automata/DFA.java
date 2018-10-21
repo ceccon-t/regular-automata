@@ -5,15 +5,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import ufrgs.inf.formais.helper.State;
 import ufrgs.inf.formais.helper.Symbol;
-import ufrgs.inf.formais.helper.Tuple;
+import ufrgs.inf.formais.helper.StateSymbolTuple;
 import ufrgs.inf.formais.helper.Word;
 
 public class DFA extends Automaton{
 	
 	protected String type = "Deterministic Finite Automaton";
 	
-	private HashMap<Tuple, String> transitionFunction;
+	private HashMap<StateSymbolTuple, State> transitionFunction;
 	
 	public DFA() {
 		
@@ -21,10 +22,10 @@ public class DFA extends Automaton{
 	
 	public DFA(String name, 
 			HashSet<Symbol> alphabet,
-			HashSet<String> states, 
-			String initialState, 
-			HashSet<String> finalStates,
-			HashMap<Tuple, String> transitionFunction) {
+			HashSet<State> states, 
+			State initialState, 
+			HashSet<State> finalStates,
+			HashMap<StateSymbolTuple, State> transitionFunction) {
 		this.name = name;
 		this.alphabet = alphabet;
 		this.states = states;
@@ -37,21 +38,21 @@ public class DFA extends Automaton{
 		return type;
 	}
 
-	public HashMap<Tuple, String> getTransitionFunction() {
+	public HashMap<StateSymbolTuple, State> getTransitionFunction() {
 		return transitionFunction;
 	}
 
-	public void setTransitionFunction(HashMap<Tuple, String> transitionFunction) {
+	public void setTransitionFunction(HashMap<StateSymbolTuple, State> transitionFunction) {
 		this.transitionFunction = transitionFunction;
 	}
 	
-	public boolean recognize(List<String> word) {
-		String state = initialState;
+	public boolean recognize(List<Symbol> word) {
+		State state = initialState;
 		
 		int pos = 0;
 		
 		while (pos < word.size()) {
-			Tuple transition = new Tuple(state, word.get(pos));
+			StateSymbolTuple transition = new StateSymbolTuple(state, word.get(pos));
 			
 			if (!transitionFunction.containsKey(transition)) {
 				return false;
@@ -73,10 +74,10 @@ public class DFA extends Automaton{
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("\n- Transition function: \n");
-		for (Map.Entry<Tuple, String> transition : transitionFunction.entrySet()) {
-			Tuple key = transition.getKey();
-			String destiny = transition.getValue();
-			sb.append("( " + key.getLeft() + " , " + key.getRight() + " ) => " + destiny + "\n");
+		for (Map.Entry<StateSymbolTuple, State> transition : transitionFunction.entrySet()) {
+			StateSymbolTuple key = transition.getKey();
+			State destiny = transition.getValue();
+			sb.append("( " + key.getState() + " , " + key.getSymbol() + " ) => " + destiny + "\n");
 		}
 		sb.append("\n-End of transition function-\n");
 		

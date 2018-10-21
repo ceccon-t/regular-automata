@@ -2,6 +2,7 @@ package ufrgs.inf.formais.automata;
 
 import java.util.HashSet;
 
+import ufrgs.inf.formais.helper.State;
 import ufrgs.inf.formais.helper.Symbol;
 
 
@@ -13,11 +14,11 @@ public abstract class Automaton {
 	
 	protected HashSet<Symbol> alphabet;
 	
-	protected HashSet<String> states;
+	protected HashSet<State> states;
 	
-	protected String initialState;
+	protected State initialState;
 	
-	protected HashSet<String> finalStates;
+	protected HashSet<State> finalStates;
 
 	public String getType() {
 		return type;
@@ -39,27 +40,27 @@ public abstract class Automaton {
 		this.alphabet = alphabet;
 	}
 
-	public HashSet<String> getStates() {
+	public HashSet<State> getStates() {
 		return states;
 	}
 
-	public void setStates(HashSet<String> states) {
+	public void setStates(HashSet<State> states) {
 		this.states = states;
 	}
 
-	public String getInitialState() {
+	public State getInitialState() {
 		return initialState;
 	}
 
-	public void setInitialState(String initialState) {
+	public void setInitialState(State initialState) {
 		this.initialState = initialState;
 	}
 
-	public HashSet<String> getFinalStates() {
+	public HashSet<State> getFinalStates() {
 		return finalStates;
 	}
 
-	public void setFinalStates(HashSet<String> finalStates) {
+	public void setFinalStates(HashSet<State> finalStates) {
 		this.finalStates = finalStates;
 	}
 	
@@ -81,7 +82,7 @@ public abstract class Automaton {
 		
 		// States
 		sb.append("States:");
-		for (String state : this.getStates()) {
+		for (State state : this.getStates()) {
 			sb.append(" '" + state + "'");
 		}
 		sb.append("\n");
@@ -90,7 +91,7 @@ public abstract class Automaton {
 		
 		// Final states
 		sb.append("Final states:");
-		for (String finalState: this.getFinalStates()) {
+		for (State finalState: this.getFinalStates()) {
 			sb.append(" '" + finalState + "'");
 		}
 		sb.append("\n");

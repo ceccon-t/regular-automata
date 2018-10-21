@@ -5,7 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ufrgs.inf.formais.helper.Symbol;
-import ufrgs.inf.formais.helper.Tuple;
+import ufrgs.inf.formais.helper.State;
+import ufrgs.inf.formais.helper.StateSymbolTuple;
 import ufrgs.inf.formais.helper.Word;
 
 import static org.junit.Assert.assertFalse;
@@ -13,6 +14,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.stream.Stream;
 
 
 public class DFATest {
@@ -30,7 +32,8 @@ public class DFATest {
 	@Test
 	public void recognizeWordsThatEndWithA() {
 		DFA automaton = dfaEndsWithA();
-		Word word = new Word(new String[] {"a", "b", "a", "b", "a", "b", "a"});
+		String[] sequence = new String[] {"a", "b", "a", "b", "a", "b", "a"};
+		Word word = new Word(Stream.of(sequence).map(Symbol::new).toArray(Symbol[]::new));
 		
 		assertTrue(automaton.recognize(word));
 	}
@@ -38,7 +41,8 @@ public class DFATest {
 	@Test
 	public void doesNotRecognizeWordsThatDoNotEndWithA() {
 		DFA automaton = dfaEndsWithA();
-		Word word = new Word(new String[] {"a", "a", "b", "a", "b"});
+		String[] sequence = new String[] {"a", "a", "b", "a", "b"};
+		Word word = new Word(Stream.of(sequence).map(Symbol::new).toArray(Symbol[]::new));
 		
 		assertFalse(automaton.recognize(word));
 	}
@@ -46,19 +50,23 @@ public class DFATest {
 	private DFA dfaEndsWithA() {
 		String name = "Ends With A";
 		HashSet<Symbol> alphabet = new HashSet<Symbol>();
-		alphabet.add(new Symbol("a"));
-		alphabet.add(new Symbol("b"));
-		HashSet<String> states = new HashSet<String>();
-		states.add("q0");
-		states.add("q1");
-		String initialState = "q0";
-		HashSet<String> finalStates = new HashSet<String>();
-		finalStates.add("q1");
-		HashMap<Tuple, String> transitionFunction = new HashMap<Tuple, String>();
-		transitionFunction.put(new Tuple("q0", "a"), "q1");
-		transitionFunction.put(new Tuple("q0", "b"), "q0");
-		transitionFunction.put(new Tuple("q1", "a"), "q1");
-		transitionFunction.put(new Tuple("q1", "b"), "q0");
+		Symbol a = new Symbol("a");
+		Symbol b = new Symbol("b");
+		alphabet.add(a);
+		alphabet.add(b);
+		HashSet<State> states = new HashSet<State>();
+		State q0 = new State("q0");
+		State q1 = new State("q1");
+		states.add(q0);
+		states.add(q1);
+		State initialState = q0;
+		HashSet<State> finalStates = new HashSet<State>();
+		finalStates.add(q1);
+		HashMap<StateSymbolTuple, State> transitionFunction = new HashMap<StateSymbolTuple, State>();
+		transitionFunction.put(new StateSymbolTuple(q0, a), q1);
+		transitionFunction.put(new StateSymbolTuple(q0, b), q0);
+		transitionFunction.put(new StateSymbolTuple(q1, a), q1);
+		transitionFunction.put(new StateSymbolTuple(q1, b), q0);
 		
 		return new DFA(name, alphabet, states, initialState, finalStates, transitionFunction);
 	}
