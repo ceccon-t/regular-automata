@@ -30,7 +30,7 @@ public class DFATest {
 	}
 	
 	@Test
-	public void recognizeWordsThatEndWithA() {
+	public void recognizesWordsThatEndWithA() {
 		DFA automaton = dfaEndsWithA();
 		String[] sequence = new String[] {"a", "b", "a", "b", "a", "b", "a"};
 		Word word = new Word(Stream.of(sequence).map(Symbol::new).toArray(Symbol[]::new));
