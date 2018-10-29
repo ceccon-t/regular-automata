@@ -22,6 +22,10 @@ public abstract class AutomatonBuilder {
 		this.name = name;
 	}
 	
+	public void setAlphabet(HashSet<Symbol> alphabet) {
+		this.alphabet = alphabet;
+	}
+	
 	public void addSymbolToAlphabetFromString(String symbol) {
 		this.alphabet.add(new Symbol(symbol));
 	}
@@ -40,6 +44,10 @@ public abstract class AutomatonBuilder {
 		for (Symbol symbol : symbols) {
 			this.alphabet.add(symbol);
 		}
+	}
+	
+	public void setStates(HashSet<State> states) {
+		this.states = states;
 	}
 	
 	public void addStateFromString(String state) {
@@ -79,6 +87,10 @@ public abstract class AutomatonBuilder {
 		} else {
 			this.initialState = initialState;
 		}
+	}
+	
+	public void setFinalStates(HashSet<State> finalStates) {
+		this.finalStates = finalStates;
 	}
 	
 	public void addFinalStateFromString(String finalStateString) {
