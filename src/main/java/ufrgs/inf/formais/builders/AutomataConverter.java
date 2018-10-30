@@ -60,7 +60,7 @@ public class AutomataConverter {
 						allReachable.addAll(oldTransitionFunction.get(tuple));
 					}
 				}
-				if (allReachable.size() > 1) {
+				if (allReachable.size() > 0) {
 					CompositeState newComposite = new CompositeState(allReachable);
 					if (!collapsedStates.containsKey(newComposite)) { // first time found, should be added everywhere
 						State collapsed = newComposite.collapse(countCollapsed++);
