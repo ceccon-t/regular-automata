@@ -13,6 +13,14 @@ public class Word {
 			sequence.add(symbol);
 		}
 	}
+	
+	public Word(String wordStr, String delimiter) {
+		String[] wordArr = wordStr.split(delimiter);
+		sequence = new ArrayList<Symbol>(wordArr.length);
+		for (String symbolStr : wordArr) {
+			sequence.add(new Symbol(symbolStr));
+		}
+	}
 
 	public List<Symbol> getSequence() {
 		return sequence;
