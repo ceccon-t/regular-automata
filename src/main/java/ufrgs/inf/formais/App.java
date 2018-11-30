@@ -43,7 +43,7 @@ public class App  {
     	
     	JLabel decisionLabel = new JLabel();
     	decisionLabel.setText("Waiting...");
-    	decisionLabel.setText(automaton.recognize(new Word("ba", ""))? "Yes":"No");
+    	decisionLabel.setText("");
     	
     	addWordBtn.addActionListener(new ActionListener() {
 
@@ -51,7 +51,7 @@ public class App  {
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				String userInput = userInputField.getText();
-				decisionLabel.setText(automaton.recognize(new Word(userInput, "")) ? "YES" : "NO" );
+				decisionLabel.setText(automaton.recognize(new Word(userInput, "")) ? "ACCEPTED" : "REJECTED" );
 			}
     		
     	});
@@ -104,7 +104,7 @@ public class App  {
     }
     
     private static String getAutomatonNameDisplay(String name) {
-    	return (name.length() < 10 ) ? name : name.substring(0, 6) + "..." ;
+    	return (name.length() <= 30 ) ? name : name.substring(0, 26) + "..." ;
     }
     
 	public static DFA dfaEndsWithA() {
