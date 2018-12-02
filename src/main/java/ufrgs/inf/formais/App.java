@@ -50,23 +50,23 @@ public class App  {
     	// Top main panel
     	JPanel topMainPanel = new JPanel();
     	JTextField userInputField = new JTextField(20);
+    	userInputField.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				addUserInputToTable(userInputField, wordsTable);
+			}
+		});
     	
     	JButton addWordBtn = new JButton("Add");
-    	
     	addWordBtn.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				String userInput = userInputField.getText();
-				DefaultTableModel tableModel = (DefaultTableModel) wordsTable.getModel();
-				tableModel.addRow(new Object[] {userInput, ""});
+				addUserInputToTable(userInputField, wordsTable);
 			}
-    		
     	});
     	
     	JButton decideBtn = new JButton("Decide");
     	decideBtn.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (automaton != null) {
@@ -78,7 +78,6 @@ public class App  {
 					}
 				}
 			}
-    		
     	});
     	
     	topMainPanel.add(userInputField);
@@ -136,7 +135,6 @@ public class App  {
     	mainFrame.getContentPane().add(BorderLayout.SOUTH, automatonPanel);
     	
     	mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    	//mainFrame.setSize(600, 400); 
     	mainFrame.setMinimumSize(new Dimension(600, 400));
     	mainFrame.setVisible(true);
     	mainFrame.setTitle("Regular Automata");
@@ -172,6 +170,12 @@ public class App  {
 		for (int i = 0; i < tableModel.getRowCount(); i++) {
 			tableModel.setValueAt("", i, 1);
 		}
+    }
+    
+    private static void addUserInputToTable(JTextField inputField, JTable table) {
+		String userInput = inputField.getText();
+		DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+		tableModel.addRow(new Object[] {userInput, ""});
     }
     
 	public static DFA dfaEndsWithA() {
