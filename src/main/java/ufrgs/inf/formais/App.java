@@ -1,6 +1,7 @@
 package ufrgs.inf.formais;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -35,6 +36,7 @@ import ufrgs.inf.formais.storage.NFAStorage;
 public class App  {
 	
 	private static DFA automaton;
+	private static NFA nfaAutomaton;
 	
     public static void main( String[] args ) {
     	
@@ -51,16 +53,11 @@ public class App  {
     	
     	JButton addWordBtn = new JButton("Add");
     	
-    	JLabel decisionLabel = new JLabel();
-    	decisionLabel.setText("Waiting...");
-    	decisionLabel.setText("");
-    	
     	addWordBtn.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String userInput = userInputField.getText();
-				decisionLabel.setText(automaton.recognize(new Word(userInput, "")) ? "ACCEPTED" : "REJECTED" );
 				DefaultTableModel tableModel = (DefaultTableModel) wordsTable.getModel();
 				tableModel.addRow(new Object[] {userInput, ""});
 			}
@@ -108,12 +105,12 @@ public class App  {
 					File selectedFile = fileChooser.getSelectedFile();
 					NFAStorage nfas = new NFAStorage();
 					try {
-						NFA nfa = nfas.load(selectedFile);
-						automaton = AutomataConverter.nfaToDfa(nfa); 
+						nfaAutomaton = nfas.load(selectedFile);
+						automaton = null;
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-					String automatonName = automaton.getName();
+					String automatonName = nfaAutomaton.getName();
 					automatonNameLabel.setText(getAutomatonNameDisplay(automatonName));
 					automatonNameLabel.setToolTipText(automatonName);
 					cleanTableResults(wordsTable);
@@ -121,13 +118,26 @@ public class App  {
 			}
     	});
     	
+    	JButton convertToDfaBtn = new JButton("Convert to DFA");
+    	convertToDfaBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				automaton = AutomataConverter.nfaToDfa(nfaAutomaton);
+				String automatonName = automaton.getName();
+				automatonNameLabel.setText(getAutomatonNameDisplay(automatonName));
+				automatonNameLabel.setToolTipText(automatonName);
+			}
+    	});
+    	
     	automatonPanel.add(fileChooserBtn);
+    	automatonPanel.add(convertToDfaBtn);
     	
     	mainFrame.getContentPane().add(BorderLayout.CENTER, mainPanel);
     	mainFrame.getContentPane().add(BorderLayout.SOUTH, automatonPanel);
     	
     	mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    	mainFrame.setSize(500, 300); 
+    	//mainFrame.setSize(600, 400); 
+    	mainFrame.setMinimumSize(new Dimension(600, 400));
     	mainFrame.setVisible(true);
     	mainFrame.setTitle("Regular Automata");
     	
