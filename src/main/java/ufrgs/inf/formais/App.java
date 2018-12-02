@@ -3,18 +3,25 @@ package ufrgs.inf.formais;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.table.DefaultTableModel;
 
 import ufrgs.inf.formais.automata.DFA;
 import ufrgs.inf.formais.automata.NFA;
@@ -30,16 +37,19 @@ public class App  {
 	private static DFA automaton;
 	
     public static void main( String[] args ) {
-        //System.out.println( "Hello World!" );
     	
     	automaton = dfaEndsWithA();
     	
+    	// Main panel
     	JFrame mainFrame = new JFrame();
     	JPanel mainPanel = new JPanel();
+    	JTable wordsTable = createTable();
     	
+    	// Top main panel
+    	JPanel topMainPanel = new JPanel();
     	JTextField userInputField = new JTextField(20);
     	
-    	JButton addWordBtn = new JButton("Decide");
+    	JButton addWordBtn = new JButton("Add");
     	
     	JLabel decisionLabel = new JLabel();
     	decisionLabel.setText("Waiting...");
@@ -49,17 +59,40 @@ public class App  {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
 				String userInput = userInputField.getText();
 				decisionLabel.setText(automaton.recognize(new Word(userInput, "")) ? "ACCEPTED" : "REJECTED" );
+				DefaultTableModel tableModel = (DefaultTableModel) wordsTable.getModel();
+				tableModel.addRow(new Object[] {userInput, ""});
 			}
     		
     	});
-    	mainPanel.add(userInputField);
-    	mainPanel.add(addWordBtn);
-    	mainPanel.add(decisionLabel);
     	
-    	// Right panel
+    	JButton decideBtn = new JButton("Decide");
+    	decideBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (automaton != null) {
+					DefaultTableModel tableModel = (DefaultTableModel) wordsTable.getModel();
+					for (int i = 0; i < tableModel.getRowCount(); i++) {
+						String word = (String) tableModel.getValueAt(i, 0);
+						String result = automaton.recognize(new Word(word, "")) ? "ACCEPTED" : "REJECTED";
+						tableModel.setValueAt(result, i, 1);
+					}
+				}
+			}
+    		
+    	});
+    	
+    	topMainPanel.add(userInputField);
+    	topMainPanel.add(addWordBtn);
+    	topMainPanel.add(decideBtn);
+    	
+    	mainPanel.setLayout(new BorderLayout());
+    	mainPanel.add(BorderLayout.NORTH, topMainPanel);
+    	mainPanel.add(BorderLayout.CENTER, new JScrollPane(wordsTable));
+    	
+    	// Bottom panel
     	JPanel automatonPanel = new JPanel();
     	JLabel automatonNameLabel = new JLabel();
     	automatonNameLabel.setText(automaton.getName());
@@ -68,10 +101,8 @@ public class App  {
     	JFileChooser fileChooser = new JFileChooser();
     	JButton fileChooserBtn = new JButton("Load automaton");
     	fileChooserBtn.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
 				int returnValue = fileChooser.showOpenDialog(null);
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = fileChooser.getSelectedFile();
@@ -80,15 +111,14 @@ public class App  {
 						NFA nfa = nfas.load(selectedFile);
 						automaton = AutomataConverter.nfaToDfa(nfa); 
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					String automatonName = automaton.getName();
 					automatonNameLabel.setText(getAutomatonNameDisplay(automatonName));
 					automatonNameLabel.setToolTipText(automatonName);
+					cleanTableResults(wordsTable);
 				}
 			}
-    		
     	});
     	
     	automatonPanel.add(fileChooserBtn);
@@ -105,6 +135,33 @@ public class App  {
     
     private static String getAutomatonNameDisplay(String name) {
     	return (name.length() <= 30 ) ? name : name.substring(0, 26) + "..." ;
+    }
+    
+    private static JTable createTable() {
+    	DefaultTableModel tableModel = new DefaultTableModel(new Object[] {"Word", "Result"}, 0);
+    	JTable table = new JTable(tableModel);
+    	
+    	InputMap inputMap = table.getInputMap();
+    	ActionMap actionMap = table.getActionMap();
+    	
+    	inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "Delete");
+    	inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), "Delete");
+    	
+    	actionMap.put("Delete", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				tableModel.removeRow(table.getSelectedRow());
+			}
+    	});
+    	
+    	return table;
+    }
+    
+    private static void cleanTableResults(JTable table) {
+		DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+		for (int i = 0; i < tableModel.getRowCount(); i++) {
+			tableModel.setValueAt("", i, 1);
+		}
     }
     
 	public static DFA dfaEndsWithA() {
