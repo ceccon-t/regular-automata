@@ -6,9 +6,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Scanner;
 
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -42,6 +46,8 @@ public class App  {
     	
     	automaton = dfaEndsWithA();
     	
+    	JFileChooser fileChooser = new JFileChooser();
+    	
     	// Main panel
     	JFrame mainFrame = new JFrame();
     	JPanel mainPanel = new JPanel();
@@ -65,6 +71,18 @@ public class App  {
 			}
     	});
     	
+    	JButton loadFileOfWords = new JButton("Load words");
+    	loadFileOfWords.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				int returnValue = fileChooser.showOpenDialog(null);
+				if (returnValue == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = fileChooser.getSelectedFile();
+					loadListOfWordsIntoTable(wordsTable, getListOfWordsFromFile(selectedFile));
+				}
+			}
+    	});
+    	
     	JButton decideBtn = new JButton("Decide");
     	decideBtn.addActionListener(new ActionListener() {
 			@Override
@@ -82,6 +100,7 @@ public class App  {
     	
     	topMainPanel.add(userInputField);
     	topMainPanel.add(addWordBtn);
+    	topMainPanel.add(loadFileOfWords);
     	topMainPanel.add(decideBtn);
     	
     	mainPanel.setLayout(new BorderLayout());
@@ -94,7 +113,6 @@ public class App  {
     	automatonNameLabel.setText(automaton.getName());
     	automatonPanel.add(automatonNameLabel);
     	
-    	JFileChooser fileChooser = new JFileChooser();
     	JButton fileChooserBtn = new JButton("Load automaton");
     	fileChooserBtn.addActionListener(new ActionListener() {
 			@Override
@@ -143,6 +161,27 @@ public class App  {
     
     private static String getAutomatonNameDisplay(String name) {
     	return (name.length() <= 30 ) ? name : name.substring(0, 26) + "..." ;
+    }
+    
+    private static List<String> getListOfWordsFromFile(File file) {
+    	ArrayList<String> listOfWords = new ArrayList<String>();
+    	Scanner scanner;
+		try {
+			scanner = new Scanner(file);
+	    	while (scanner.hasNextLine()) {
+	    		listOfWords.add(scanner.nextLine());
+	    	}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+    	return listOfWords;
+    }
+    
+    private static void loadListOfWordsIntoTable(JTable table, List<String> words) {
+    	DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+    	for (String word : words) {
+    		tableModel.addRow(new Object[] {word, ""});
+    	}
     }
     
     private static JTable createTable() {
