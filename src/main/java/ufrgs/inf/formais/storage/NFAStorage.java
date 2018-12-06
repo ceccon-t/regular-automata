@@ -65,12 +65,12 @@ public class NFAStorage {
 			
 			definitions = header[1].substring(header[1].indexOf('(')+1, header[1].indexOf(')'));
 			
-			initPos = 1;
+			initPos = definitions.indexOf('{')+1;
 			lastPos = definitions.indexOf('}');
 			String[] symbols = definitions.substring(initPos, lastPos).split(",");
 			builder.addSymbolListToAlphabetFromString(Arrays.asList(symbols));
 			
-			initPos = lastPos+3;
+			initPos = definitions.indexOf('{', lastPos)+1;
 			lastPos = definitions.indexOf('}', initPos);
 			String[] states = definitions.substring(initPos, lastPos).split(",");
 			builder.addStateListFromString(Arrays.asList(states));
@@ -84,7 +84,7 @@ public class NFAStorage {
 			definitions = header[1].substring(header[1].indexOf('(')+1, header[1].indexOf(')'));
 			
 			// Order of alphabet and set of states is flipped from official definition, so read accordingly
-			initPos = 1;
+			initPos = definitions.indexOf('{')+1;
 			lastPos = definitions.indexOf('}');
 			String[] states = definitions.substring(initPos, lastPos).split(",");
 			builder.addStateListFromString(Arrays.asList(states));
@@ -108,8 +108,8 @@ public class NFAStorage {
 		
 		String transition;
 		while ((transition = br.readLine()) != null) {
-			String initState = transition.substring(transition.indexOf('(')+1, transition.indexOf(','));
-			String symbol = transition.substring(transition.indexOf(',')+1, transition.indexOf(')'));
+			String initState = transition.substring(transition.indexOf('(')+1, transition.indexOf(',')).trim();
+			String symbol = transition.substring(transition.indexOf(',')+1, transition.indexOf(')')).trim();
 			String destinyState = transition.substring(transition.indexOf("=")+1).trim();
 			builder.addTransitionFromStrings(initState, symbol, destinyState);
 		}
