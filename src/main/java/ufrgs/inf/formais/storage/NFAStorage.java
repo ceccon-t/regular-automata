@@ -55,57 +55,41 @@ public class NFAStorage {
 		int initPos;
 		int lastPos;
 		
-		String definitions;
-		
 		String top = br.readLine();
 		
-		if (top.indexOf("Integrantes:") == -1) { // Is in official format, should read as specified on project definition 
-			String[] header = top.split("=");
-			builder.setName(header[0]);
-			
-			definitions = header[1].substring(header[1].indexOf('(')+1, header[1].indexOf(')'));
-			
-			initPos = definitions.indexOf('{')+1;
-			lastPos = definitions.indexOf('}');
-			String[] symbols = definitions.substring(initPos, lastPos).split(",");
-			builder.addSymbolListToAlphabetFromString(Arrays.asList(symbols));
-			
-			initPos = definitions.indexOf('{', lastPos)+1;
-			lastPos = definitions.indexOf('}', initPos);
-			String[] states = definitions.substring(initPos, lastPos).split(",");
-			builder.addStateListFromString(Arrays.asList(states));
-		} else { // Is in alternate format, should read as specified on project example
-			br.readLine(); // jumps an empty line separating list of group integrants from automaton definition
-			top = br.readLine();
-			
-			String[] header = top.split("=");
-			builder.setName(header[0]);
-			
-			definitions = header[1].substring(header[1].indexOf('(')+1, header[1].indexOf(')'));
-			
-			// Order of alphabet and set of states is flipped from official definition, so read accordingly
-			initPos = definitions.indexOf('{')+1;
-			lastPos = definitions.indexOf('}');
-			String[] states = definitions.substring(initPos, lastPos).split(",");
-			builder.addStateListFromString(Arrays.asList(states));
-			
-			initPos = definitions.indexOf('{', lastPos)+1;
-			lastPos = definitions.indexOf('}', initPos);
-			String[] symbols = definitions.substring(initPos, lastPos).split(",");
-			builder.addSymbolListToAlphabetFromString(Arrays.asList(symbols));
-		}
+		String[] header = top.split("=");
 		
+		String definitions = header[1].substring(header[1].indexOf('(')+1, header[1].indexOf(')'));
+		
+		// Load name
+		builder.setName(header[0]);
+		
+		// Load alphabet
+		initPos = definitions.indexOf('{')+1;
+		lastPos = definitions.indexOf('}');
+		String[] symbols = definitions.substring(initPos, lastPos).split(",");
+		builder.addSymbolListToAlphabetFromString(Arrays.asList(symbols));
+		
+		// Load set of states 
+		initPos = definitions.indexOf('{', lastPos)+1;
+		lastPos = definitions.indexOf('}', initPos);
+		String[] states = definitions.substring(initPos, lastPos).split(",");
+		builder.addStateListFromString(Arrays.asList(states));
+		
+		// Load initial state
 		initPos = lastPos+2;
 		lastPos = definitions.indexOf(',', initPos);
 		builder.setInitialStateFromString(definitions.substring(initPos, lastPos).trim());
 		
+		// Load final states
 		initPos = definitions.indexOf('{', lastPos) + 1;
 		lastPos = definitions.indexOf('}', initPos);
 		String[] finalStates = definitions.substring(initPos, lastPos).split(",");
 		builder.addFinalStateListFromString(Arrays.asList(finalStates));
 		
 		br.readLine(); // skip 'Prog' line
-		
+
+		// Load transition function
 		String transition;
 		while ((transition = br.readLine()) != null) {
 			String initState = transition.substring(transition.indexOf('(')+1, transition.indexOf(',')).trim();
