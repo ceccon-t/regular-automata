@@ -28,6 +28,7 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableModel;
 
+import ufrgs.inf.formais.automata.Automaton;
 import ufrgs.inf.formais.automata.DFA;
 import ufrgs.inf.formais.automata.NFA;
 import ufrgs.inf.formais.builders.AutomataConverter;
@@ -39,8 +40,7 @@ import ufrgs.inf.formais.storage.NFAStorage;
 
 public class App  {
 	
-	private static DFA automaton;
-	private static NFA nfaAutomaton;
+	private static Automaton automaton;
 	
     public static void main( String[] args ) {
     	
@@ -122,12 +122,11 @@ public class App  {
 					File selectedFile = fileChooser.getSelectedFile();
 					NFAStorage nfas = new NFAStorage();
 					try {
-						nfaAutomaton = nfas.load(selectedFile);
-						automaton = null;
+						automaton = nfas.load(selectedFile);
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-					String automatonName = nfaAutomaton.getName();
+					String automatonName = automaton.getName();
 					automatonNameLabel.setText(getAutomatonNameDisplay(automatonName));
 					automatonNameLabel.setToolTipText(automatonName);
 					cleanTableResults(wordsTable);
@@ -139,10 +138,12 @@ public class App  {
     	convertToDfaBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				automaton = AutomataConverter.nfaToDfa(nfaAutomaton);
-				String automatonName = automaton.getName();
-				automatonNameLabel.setText(getAutomatonNameDisplay(automatonName));
-				automatonNameLabel.setToolTipText(automatonName);
+				if (automaton instanceof NFA) {
+					automaton = AutomataConverter.nfaToDfa((NFA) automaton);
+					String automatonName = automaton.getName();
+					automatonNameLabel.setText(getAutomatonNameDisplay(automatonName));
+					automatonNameLabel.setToolTipText(automatonName);
+				}
 			}
     	});
     	
