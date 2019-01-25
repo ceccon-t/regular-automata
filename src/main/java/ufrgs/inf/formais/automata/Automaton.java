@@ -4,6 +4,7 @@ import java.util.HashSet;
 
 import ufrgs.inf.formais.helper.State;
 import ufrgs.inf.formais.helper.Symbol;
+import ufrgs.inf.formais.helper.Word;
 
 
 public abstract class Automaton {
@@ -102,6 +103,8 @@ public abstract class Automaton {
 		
 		return sb.toString();
 	}
+	
+	public abstract boolean recognize(Word word);
 	
 	public abstract String stringifyTransitionFunction();
 	

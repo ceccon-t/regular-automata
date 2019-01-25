@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import ufrgs.inf.formais.builders.AutomataConverter;
 import ufrgs.inf.formais.helper.State;
 import ufrgs.inf.formais.helper.StateSymbolTuple;
 import ufrgs.inf.formais.helper.Symbol;
+import ufrgs.inf.formais.helper.Word;
 
 public class NFA extends Automaton {
 
@@ -51,6 +53,11 @@ public class NFA extends Automaton {
 			}
 		}
 		return true;
+	}
+	
+	@Override
+	public boolean recognize(Word word) {
+		return AutomataConverter.nfaToDfa(this).recognize(word);
 	}
 
 	@Override
