@@ -7,6 +7,7 @@ Current development
 ---
 - Added changelog
 - Standardization of format of files for automata
+- No longer necessary to convert automaton before recognizing words, all types of automata now have a recognize method 
 
 =============
 Version 1.0.0
