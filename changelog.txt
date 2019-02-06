@@ -1,0 +1,20 @@
+CHANGELOG
+
+List of features/changes introduced in each release.
+
+=============
+Current development
+---
+- Added changelog
+- Standardization of format of files for automata
+
+=============
+Version 1.0.0
+---
+- Initial release
+- User can load NFAs from files
+- User can load list of words from files
+- User can convert NFA loaded to DFA
+- User must convert NFA to DFA before being able to recognize words
+- User can run a list of words through automaton loaded and see which ones were recognized
+
