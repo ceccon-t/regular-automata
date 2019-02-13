@@ -10,42 +10,45 @@ import ufrgs.inf.formais.helper.StateSymbolTuple;
 import ufrgs.inf.formais.helper.Symbol;
 import ufrgs.inf.formais.helper.Word;
 
-public class NFA extends Automaton {
-
-	protected String type = "Non-Deterministic Finite Automaton";
+public class NFAe extends NFA {
 	
-	protected HashMap<StateSymbolTuple, HashSet<State>> transitionFunction;
+	protected String type = "Non-Deterministic Finite Automaton with epsilon transitions";
 	
-	public NFA() {
+	private HashMap<State, HashSet<State>> epsilonTransitions;
+	
+	public NFAe() {
 		
 	}
 	
-	public NFA(String name,
+	public NFAe(String name,
 				HashSet<Symbol> alphabet,
 				HashSet<State> states,
 				State initialState,
 				HashSet<State> finalStates,
-				HashMap<StateSymbolTuple, HashSet<State>> transitionFunction) {
+				HashMap<StateSymbolTuple, HashSet<State>> transitionFunction,
+				HashMap<State, HashSet<State>> epsilonTransitions) {
 		this.name = name;
 		this.alphabet = alphabet;
 		this.states = states;
 		this.initialState = initialState;
 		this.finalStates = finalStates;
 		this.transitionFunction = transitionFunction;
+		this.epsilonTransitions = epsilonTransitions;
 	}
 	
 	public String getType() {
 		return type;
 	}
-
-	public HashMap<StateSymbolTuple, HashSet<State>> getTransitionFunction() {
-		return transitionFunction;
-	}
-
-	public void setTransitionFunction(HashMap<StateSymbolTuple, HashSet<State>> transitionFunction) {
-		this.transitionFunction = transitionFunction;
+	
+	public HashMap<State, HashSet<State>> getEpsilonTransitions() {
+		return this.epsilonTransitions;
 	}
 	
+	public void setEpsilonTransitions(HashMap<State, HashSet<State>> epsilonTransitions) {
+		this.epsilonTransitions = epsilonTransitions;
+	}
+
+	/*
 	public boolean isDeterministic() {
 		for (Map.Entry<StateSymbolTuple, HashSet<State>> transition : transitionFunction.entrySet()) {
 			if (transition.getValue().size() > 1) {
@@ -59,18 +62,27 @@ public class NFA extends Automaton {
 	public boolean recognize(Word word) {
 		return AutomataConverter.nfaToDfa(this).recognize(word);
 	}
+	*/
 
 	@Override
 	public String stringifyTransitionFunction() {
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("\n- Transition function: \n");
+		// Normal transitions
 		for (Map.Entry<StateSymbolTuple, HashSet<State>> transition : transitionFunction.entrySet()) {
 			StateSymbolTuple key = transition.getKey();
 			State state = key.getState();
 			Symbol symbol = key.getSymbol();
 			for (State destiny : transition.getValue()) {
 				sb.append("( " + state + " , " + symbol + " ) => " + destiny + "\n");
+			}
+		}
+		// Epsilon transitions
+		for (Map.Entry<State, HashSet<State>> epsilonTransition : epsilonTransitions.entrySet()) {
+			State origin = epsilonTransition.getKey();
+			for (State destiny : epsilonTransition.getValue()) {
+				sb.append("( " + origin + " , ) => " + destiny + "\n");
 			}
 		}
 		sb.append("\n-End of transition function-\n");
