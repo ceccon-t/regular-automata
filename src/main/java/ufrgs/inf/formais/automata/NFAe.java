@@ -1,14 +1,14 @@
 package ufrgs.inf.formais.automata;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
-import ufrgs.inf.formais.builders.AutomataConverter;
 import ufrgs.inf.formais.helper.State;
 import ufrgs.inf.formais.helper.StateSymbolTuple;
 import ufrgs.inf.formais.helper.Symbol;
-import ufrgs.inf.formais.helper.Word;
 
 public class NFAe extends NFA {
 	
@@ -47,17 +47,37 @@ public class NFAe extends NFA {
 	public void setEpsilonTransitions(HashMap<State, HashSet<State>> epsilonTransitions) {
 		this.epsilonTransitions = epsilonTransitions;
 	}
+	
+	public HashSet<State> getEpsilonClosure(State state) {
+		HashSet<State> reachableStates = new HashSet<State>();
+		List<State> toVisit = new ArrayList<State>();
+		
+		toVisit.add(state);
+		
+		while (!toVisit.isEmpty()) {
+			State visiting = toVisit.remove(toVisit.size()-1);
+			reachableStates.add(visiting);
+			toVisit.addAll( epsilonTransitions.get(visiting) );
+		}
+		
+		return reachableStates;
+		
+	}
 
-	/*
+	@Override
 	public boolean isDeterministic() {
+		// Each state has only one possible destiny state for a given symbol
 		for (Map.Entry<StateSymbolTuple, HashSet<State>> transition : transitionFunction.entrySet()) {
 			if (transition.getValue().size() > 1) {
 				return false;
 			}
 		}
-		return true;
+		// And there are no empty movements
+		return epsilonTransitions.isEmpty();
 	}
 	
+	
+	/*
 	@Override
 	public boolean recognize(Word word) {
 		return AutomataConverter.nfaToDfa(this).recognize(word);
