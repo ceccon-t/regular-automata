@@ -57,7 +57,10 @@ public class NFAe extends NFA {
 		while (!toVisit.isEmpty()) {
 			State visiting = toVisit.remove(toVisit.size()-1);
 			reachableStates.add(visiting);
-			toVisit.addAll( epsilonTransitions.get(visiting) );
+			HashSet<State> transitions = epsilonTransitions.get(visiting);
+			if (transitions != null) {
+				toVisit.addAll(transitions);
+			} 
 		}
 		
 		return reachableStates;
