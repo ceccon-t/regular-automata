@@ -6,9 +6,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import ufrgs.inf.formais.builders.AutomataConverter;
 import ufrgs.inf.formais.helper.State;
 import ufrgs.inf.formais.helper.StateSymbolTuple;
 import ufrgs.inf.formais.helper.Symbol;
+import ufrgs.inf.formais.helper.Word;
 
 public class NFAe extends NFA {
 	
@@ -66,6 +68,10 @@ public class NFAe extends NFA {
 		return reachableStates;
 		
 	}
+	
+	public boolean hasNoEpsilonTransitions() {
+		return epsilonTransitions.isEmpty();
+	}
 
 	@Override
 	public boolean isDeterministic() {
@@ -76,16 +82,14 @@ public class NFAe extends NFA {
 			}
 		}
 		// And there are no empty movements
-		return epsilonTransitions.isEmpty();
+		return hasNoEpsilonTransitions();
 	}
 	
 	
-	/*
 	@Override
 	public boolean recognize(Word word) {
-		return AutomataConverter.nfaToDfa(this).recognize(word);
+		return AutomataConverter.nfaeToNfa(this).recognize(word);
 	}
-	*/
 
 	@Override
 	public String stringifyTransitionFunction() {
@@ -112,6 +116,8 @@ public class NFAe extends NFA {
 		
 		return sb.toString();
 	}
+	
+	
 	
 	
 

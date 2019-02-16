@@ -11,10 +11,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import ufrgs.inf.formais.helper.State;
 import ufrgs.inf.formais.helper.StateSymbolTuple;
 import ufrgs.inf.formais.helper.Symbol;
+import ufrgs.inf.formais.helper.Word;
 
 public class NFAeTest {
 	
@@ -53,6 +56,18 @@ public class NFAeTest {
 		HashSet<State> epsilonClosureOfState = testNFAe.getEpsilonClosure(stateWithEmptyTransitionOfDepthTwo);
 		
 		assertEquals(new HashSet<>(Arrays.asList(stateWithEmptyTransitionOfDepthTwo, new State("q1"), new State("q2"))), epsilonClosureOfState);
+	}
+	
+	@Test
+	public void correctlyRecognizesWordThatBelongsToLanguage() {
+		NFAe testNFAe = zeroToTheAOneToTheBTwoToTheCNFAe();
+		assertTrue(testNFAe.recognize(new Word("000111222", "")));
+	}
+	
+	@Test
+	public void correctlyDoesNotRecognizeWordThatDoesNotBelongToLanguage() {
+		NFAe testNFAe = zeroToTheAOneToTheBTwoToTheCNFAe();
+		assertFalse(testNFAe.recognize(new Word("000102", "")));
 	}
 	
 	private NFAe zeroToTheAOneToTheBTwoToTheCNFAe() {

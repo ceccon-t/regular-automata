@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import ufrgs.inf.formais.automata.DFA;
 import ufrgs.inf.formais.automata.NFA;
+import ufrgs.inf.formais.automata.NFAe;
 import ufrgs.inf.formais.helper.CompositeState;
 import ufrgs.inf.formais.helper.State;
 import ufrgs.inf.formais.helper.StateSymbolTuple;
@@ -93,6 +94,202 @@ public class AutomataConverter {
 		
 	}
 	
+	public static NFA nfaeToNfa(NFAe nfae) {
+		
+		// Reusable things
+		String newName = nfae.getName() + " | Converted to NFA";
+		HashSet<Symbol> alphabet = nfae.getAlphabet();
+		
+		// Old things that need to be accessed frequently
+		HashSet<State> oldStates = nfae.getStates();
+		HashMap<StateSymbolTuple, HashSet<State>> oldTransitionFunction = nfae.getTransitionFunction();
+		HashSet<State> oldFinalStates = nfae.getFinalStates();
+		
+		if (nfae.hasNoEpsilonTransitions()) {
+			return new NFA(newName, alphabet, nfae.getStates(), nfae.getInitialState(), nfae.getFinalStates(), nfae.getTransitionFunction());
+		}
+		
+		// For the third-dimension trick
+		CompositeState compositeNewInitialState = new CompositeState(nfae.getEpsilonClosure(nfae.getInitialState()));
+		State newInitialState = compositeNewInitialState.collapse(0);
+		
+		NFABuilder builder = new NFABuilder();
+		
+		builder.setName(newName);
+		builder.setAlphabet(alphabet);
+		
+		// Initializes new states and set new initial state
+		HashSet<State> newStates = new HashSet<State>();
+		HashSet<State> newFinalStates = new HashSet<State>();
+		
+		// Add everything from NFAe into new NFA properties
+		newStates.addAll(oldStates);
+		newStates.add(newInitialState);
+		newFinalStates.addAll(nfae.getFinalStates());
+		if (compositeStateContainsFinalState(compositeNewInitialState, oldFinalStates)) {
+			newFinalStates.add(newInitialState);
+		}
+		
+		builder.setStates(newStates);
+		builder.setInitialState(newInitialState);
+		builder.setFinalStates(newFinalStates);
+		
+		for (Map.Entry<StateSymbolTuple, HashSet<State>> entry : nfae.getTransitionFunction().entrySet() ) {
+			//newTransitionFunction.put(entry.getKey(), entry.getValue());
+			StateSymbolTuple key = entry.getKey();
+			HashSet<State> destinies = entry.getValue();
+			for (State destinyState : destinies) {
+				builder.addTransition(key.getState(), key.getSymbol(), destinyState);
+			}
+		}
+		
+		// Expand transition function
+		for (Symbol symbol : alphabet) {
+			
+			// create new transitions for new initial state on third dimension
+			HashSet<State> destiniesForInitialState = new HashSet<State>();
+			for (State internalState : compositeNewInitialState.getStates()) {
+				StateSymbolTuple tuple = new StateSymbolTuple(internalState, symbol);
+				HashSet<State> partialDestinies = oldTransitionFunction.get(tuple);
+				if (partialDestinies != null) {
+					destiniesForInitialState.addAll(partialDestinies);
+					HashSet<State> epsilonClosuresOfPartialDestinies = new HashSet<State>();
+					for (State destiny : partialDestinies) {
+						HashSet<State> epsilonClosure = nfae.getEpsilonClosure(destiny);
+						if (epsilonClosure != null) {
+							epsilonClosuresOfPartialDestinies.addAll(epsilonClosure);
+						}
+					}
+					destiniesForInitialState.addAll(epsilonClosuresOfPartialDestinies);
+				}
+			}
+			for (State destinyForInitialState : destiniesForInitialState) {
+				builder.addTransition(newInitialState, symbol, destinyForInitialState);
+			}
+			
+			// expand existing transitions to contain the epsilon closure of all destinies as well
+			for (State state : oldStates) {
+				StateSymbolTuple tuple = new StateSymbolTuple(state, symbol);
+				if (oldTransitionFunction.containsKey(tuple)) {
+					HashSet<State> oldDestiniesForTransition = oldTransitionFunction.get(tuple);
+					
+					// get epsilon closures for all possible destinies
+					HashSet<State> epsilonClosuresOfDestinies = new HashSet<State>();
+					for (State destiny : oldDestiniesForTransition) {
+						HashSet<State> epsilonClosure = nfae.getEpsilonClosure(destiny);
+						if (epsilonClosure != null) {
+							epsilonClosuresOfDestinies.addAll(epsilonClosure);
+						}
+					}
+					
+					// add closures as destinies in new transition function
+					for (State newDestiny : epsilonClosuresOfDestinies) {
+						builder.addTransition(state, symbol, newDestiny);
+					}
+					
+				}
+			}
+			
+		}
+		
+		
+		return builder.build();
+	}
+	
+	
+	// NFAe to DFA ???? 
+	/*
+	public static NFA nfaeToNfa(NFAe nfae) {
+		
+		// Reusable things
+		String newName = nfae.getName() + " | Converted to NFA";
+		HashSet<Symbol> alphabet = nfae.getAlphabet();
+		
+		// Old things that need to be accessed frequently
+		HashMap<StateSymbolTuple, HashSet<State>> oldTransitionFunction = nfae.getTransitionFunction();
+		HashMap<State, HashSet<State>> epsilonTransitions = nfae.getEpsilonTransitions();
+		HashSet<State> oldFinalStates = nfae.getFinalStates();
+		
+		
+		if (nfae.hasNoEpsilonTransitions()) {
+			return new NFA(newName, alphabet, nfae.getStates(), nfae.getInitialState(), nfae.getFinalStates(), nfae.getTransitionFunction());
+		}
+		
+		NFABuilder builder = new NFABuilder();
+		
+		builder.setName(newName);
+		builder.setAlphabet(alphabet);
+		
+		// Initializes new states and set new initial state
+		HashSet<State> newStates = new HashSet<State>();
+		HashSet<State> newFinalStates = new HashSet<State>();
+		HashMap<StateSymbolTuple, HashSet<State>> newTransitionFunction = new HashMap<StateSymbolTuple, HashSet<State>>();
+		
+		
+		HashMap<CompositeState, State> collapsedStates = new HashMap<CompositeState, State>();
+		int countCollapsed = 0;
+		
+		LinkedList<CompositeState> statesToVisit = new LinkedList<CompositeState>();
+		
+		CompositeState compositeNewInitialState = new CompositeState(nfae.getEpsilonClosure(nfae.getInitialState()));
+		collapsedStates.put(compositeNewInitialState, compositeNewInitialState.collapse(countCollapsed++));
+		statesToVisit.add(compositeNewInitialState);
+		
+		// Create new transition function, updating states and final states
+		while (!statesToVisit.isEmpty()) {
+			// Assumptions to ensure: current already is present on both newStates and collapsedStates
+			CompositeState current = statesToVisit.removeFirst();
+			
+			for (Symbol symbol : alphabet) {
+				
+				HashSet<State> possibleDestinies = new HashSet<State>();
+				
+				// get possible destinies when reading this symbol on this state
+				for (State internalState : current.getStates()) {
+					StateSymbolTuple tuple = new StateSymbolTuple(internalState, symbol);
+					HashSet<State> partialDestinies = oldTransitionFunction.get(tuple);
+					if (partialDestinies != null) {
+						possibleDestinies.addAll(partialDestinies);
+					}
+				}
+				
+				// get all possible epsilon transitions for each possible destiny state
+				HashSet<State> epsilonClosuresOfDestinies = new HashSet<State>();
+				for (State possibleDestiny : possibleDestinies) {
+					HashSet<State> epsilonClosure = nfae.getEpsilonClosure(possibleDestiny);
+					if (epsilonClosure != null) {
+						epsilonClosuresOfDestinies.addAll(epsilonClosure);
+					}
+				}
+				
+				// add epsilon closures of destinies to possible destinies
+				possibleDestinies.addAll(epsilonClosuresOfDestinies);
+				
+				CompositeState destinyState = new CompositeState(possibleDestinies);
+				
+				// if this new state had never been seen before, it needs to be placed on collapsedStates, newStates and set to be visited later
+				if (!collapsedStates.containsKey(destinyState)) {
+					collapsedStates.put(destinyState, destinyState.collapse(countCollapsed++));
+					newStates.add(collapsedStates.get(destinyState));
+					statesToVisit.addLast(destinyState);
+					if (compositeStateContainsFinalState(destinyState, oldFinalStates)) {
+						newFinalStates.add(collapsedStates.get(destinyState));
+					}
+				}
+				
+				// add transition
+				
+				
+				
+			}
+		}
+		
+		
+		
+		return builder.build();
+	}
+	*/
+	
 	private static DFA convertDeterministicNfa(NFA nfa) {
 		DFABuilder builder = new DFABuilder();
 		builder.setName(nfa.getName() + " | Converted to DFA");
@@ -114,6 +311,16 @@ public class AutomataConverter {
 		Boolean containsFinalState = false;
 		for (State state : cs.getStates()) {
 			if (nfa.getFinalStates().contains(state)) {
+				containsFinalState = true;
+			}
+		}
+		return containsFinalState;
+	}
+	
+	private static Boolean compositeStateContainsFinalState(CompositeState cs, HashSet<State> finalStates) {
+		Boolean containsFinalState = false;
+		for (State state : cs.getStates()) {
+			if (finalStates.contains(state)) {
 				containsFinalState = true;
 			}
 		}
