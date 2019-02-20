@@ -9,6 +9,7 @@ Current development
 - Standardization of format of files for automata
 - No longer necessary to convert automaton before recognizing words, all types of automata now have a recognize method
 - Added NFAe data structure 
+- Added NFA to NFAe conversion 
 
 =============
 Version 1.0.0
