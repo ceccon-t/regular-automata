@@ -16,6 +16,8 @@ public class NFA extends Automaton {
 	
 	protected HashMap<StateSymbolTuple, HashSet<State>> transitionFunction;
 	
+	protected DFA deterministicEquivalent;
+	
 	public NFA() {
 		
 	}
@@ -45,7 +47,7 @@ public class NFA extends Automaton {
 	public void setTransitionFunction(HashMap<StateSymbolTuple, HashSet<State>> transitionFunction) {
 		this.transitionFunction = transitionFunction;
 	}
-	
+
 	public boolean isDeterministic() {
 		for (Map.Entry<StateSymbolTuple, HashSet<State>> transition : transitionFunction.entrySet()) {
 			if (transition.getValue().size() > 1) {
@@ -57,7 +59,11 @@ public class NFA extends Automaton {
 	
 	@Override
 	public boolean recognize(Word word) {
-		return AutomataConverter.nfaToDfa(this).recognize(word);
+		if (deterministicEquivalent == null) {
+			deterministicEquivalent = AutomataConverter.nfaToDfa(this);
+		}
+		
+		return deterministicEquivalent.recognize(word);
 	}
 
 	@Override

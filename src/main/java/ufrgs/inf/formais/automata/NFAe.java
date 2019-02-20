@@ -88,7 +88,13 @@ public class NFAe extends NFA {
 	
 	@Override
 	public boolean recognize(Word word) {
-		return AutomataConverter.nfaeToNfa(this).recognize(word);
+		
+		if (deterministicEquivalent == null) {
+			NFA convertedToNfa = AutomataConverter.nfaeToNfa(this);
+			deterministicEquivalent = AutomataConverter.nfaToDfa(convertedToNfa);
+		}
+		return deterministicEquivalent.recognize(word);
+		
 	}
 
 	@Override

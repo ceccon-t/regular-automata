@@ -10,6 +10,7 @@ Current development
 - No longer necessary to convert automaton before recognizing words, all types of automata now have a recognize method
 - Added NFAe data structure 
 - Added NFA to NFAe conversion 
+- Added deterministic version as a private property for non-deterministic automata, to avoid running conversion many times when recognizing lists of words
 
 =============
 Version 1.0.0
