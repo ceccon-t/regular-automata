@@ -195,9 +195,35 @@ public class AutomataConverter {
 		
 		return builder.build();
 	}
+
+	public static DFA nfaeToDfa(NFAe nfae) {
+		// reuse existing conversions
+		return nfaToDfa(nfaeToNfa(nfae));
+	}
 	
+	public static NFAe nfaToNfae(NFA nfa) {
+		// create a new NFAe with same properties, but empty epsilon transitions
+		return new NFAe(nfa.getName() + " | Converted to NFAe", nfa.getAlphabet(), nfa.getStates(), nfa.getInitialState(), nfa.getFinalStates(), nfa.getTransitionFunction(),
+						new HashMap<State, HashSet<State>>());
+	}
 	
-	// NFAe to DFA ???? 
+	public static NFA dfaToNfa(DFA dfa) {
+		// almost everything is the same, just need to make mapping to a set of destiny states instead of a single destiny state
+		HashMap<StateSymbolTuple, HashSet<State>> newTransitionFunction = new HashMap<StateSymbolTuple, HashSet<State>>();
+		for (Map.Entry<StateSymbolTuple, State> transition : dfa.getTransitionFunction().entrySet()) {
+			HashSet<State> destiny = new HashSet<State>();
+			destiny.add(transition.getValue());
+			newTransitionFunction.put(transition.getKey(), destiny);
+		}
+		return new NFA(dfa.getName() + " | Converted to NFA", dfa.getAlphabet(), dfa.getStates(), dfa.getInitialState(), dfa.getFinalStates(), newTransitionFunction);
+	}
+	
+	public static NFAe dfaToNfae(DFA dfa) {
+		// reuse existing conversions
+		return nfaToNfae(dfaToNfa(dfa));
+	}
+	
+	// NFAe directly to DFA ???? 
 	/*
 	public static NFA nfaeToNfa(NFAe nfae) {
 		
