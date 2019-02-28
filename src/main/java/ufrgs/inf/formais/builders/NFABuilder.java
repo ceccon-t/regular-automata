@@ -10,7 +10,7 @@ import ufrgs.inf.formais.helper.Symbol;
 
 public class NFABuilder extends AutomatonBuilder {
 
-	private HashMap<StateSymbolTuple, HashSet<State>> transitionFunction;
+	protected HashMap<StateSymbolTuple, HashSet<State>> transitionFunction;
 	
 	public NFABuilder() {
 		this.alphabet = new HashSet<Symbol>();
