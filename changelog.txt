@@ -11,6 +11,8 @@ Current development
 - Added NFAe data structure 
 - Added NFA to NFAe conversion 
 - Added deterministic version as a private property for non-deterministic automata, to avoid running conversion many times when recognizing lists of words
+- Added all possible conversions between the types of automata
+- Changed behavior of load button on GUI to always load automata as NFAe
 
 =============
 Version 1.0.0
