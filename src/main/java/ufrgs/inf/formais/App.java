@@ -31,12 +31,14 @@ import javax.swing.table.DefaultTableModel;
 import ufrgs.inf.formais.automata.Automaton;
 import ufrgs.inf.formais.automata.DFA;
 import ufrgs.inf.formais.automata.NFA;
+import ufrgs.inf.formais.automata.NFAe;
 import ufrgs.inf.formais.builders.AutomataConverter;
 import ufrgs.inf.formais.helper.State;
 import ufrgs.inf.formais.helper.StateSymbolTuple;
 import ufrgs.inf.formais.helper.Symbol;
 import ufrgs.inf.formais.helper.Word;
 import ufrgs.inf.formais.storage.NFAStorage;
+import ufrgs.inf.formais.storage.NFAeStorage;
 
 public class App  {
 	
@@ -120,9 +122,9 @@ public class App  {
 				int returnValue = fileChooser.showOpenDialog(null);
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = fileChooser.getSelectedFile();
-					NFAStorage nfas = new NFAStorage();
+					NFAeStorage nfaes = new NFAeStorage();
 					try {
-						automaton = nfas.load(selectedFile);
+						automaton = nfaes.load(selectedFile);
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -139,7 +141,7 @@ public class App  {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (automaton instanceof NFA) {
-					automaton = AutomataConverter.nfaToDfa((NFA) automaton);
+					automaton = AutomataConverter.nfaeToDfa((NFAe) automaton);
 					String automatonName = automaton.getName();
 					automatonNameLabel.setText(getAutomatonNameDisplay(automatonName));
 					automatonNameLabel.setToolTipText(automatonName);
