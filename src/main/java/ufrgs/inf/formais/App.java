@@ -138,6 +138,7 @@ public class App  {
     	
     	JButton convertToDfaBtn = new JButton("Convert to DFA");
     	convertToDfaBtn.addActionListener(new ActionListener() {
+    		/*
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (automaton instanceof NFA) {
@@ -147,16 +148,53 @@ public class App  {
 					automatonNameLabel.setToolTipText(automatonName);
 				}
 			}
+			*/
+			public void actionPerformed(ActionEvent e) {
+				if (automaton instanceof NFAe) {
+					automaton = AutomataConverter.nfaeToDfa((NFAe) automaton);
+				} else if(automaton instanceof NFA) {
+					automaton = AutomataConverter.nfaToDfa((NFA) automaton);
+				}
+				updateAutomatonDisplay(automaton, automatonNameLabel);
+			}
+    	});
+    	
+    	JButton convertToNfaBtn = new JButton("Convert to NFA");
+    	convertToNfaBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (automaton instanceof DFA) {
+					automaton = AutomataConverter.dfaToNfa((DFA) automaton);
+				} else if (automaton instanceof NFAe) {
+					automaton = AutomataConverter.nfaeToNfa((NFAe) automaton);
+				}
+				updateAutomatonDisplay(automaton, automatonNameLabel);
+			}
+    	});
+    	
+    	JButton convertToNfaeBtn = new JButton("Convert to NFAe");
+    	convertToNfaeBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (automaton instanceof DFA) {
+					automaton = AutomataConverter.dfaToNfae((DFA) automaton);
+				} else if (automaton instanceof NFA && !(automaton instanceof NFAe)) {
+					automaton = AutomataConverter.nfaToNfae((NFA) automaton);
+				}
+				updateAutomatonDisplay(automaton, automatonNameLabel);
+			}
     	});
     	
     	automatonPanel.add(fileChooserBtn);
     	automatonPanel.add(convertToDfaBtn);
+    	automatonPanel.add(convertToNfaBtn);
+    	automatonPanel.add(convertToNfaeBtn);
     	
     	mainFrame.getContentPane().add(BorderLayout.CENTER, mainPanel);
     	mainFrame.getContentPane().add(BorderLayout.SOUTH, automatonPanel);
     	
     	mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    	mainFrame.setMinimumSize(new Dimension(600, 400));
+    	mainFrame.setMinimumSize(new Dimension(800, 600));
     	mainFrame.setVisible(true);
     	mainFrame.setTitle("Regular Automata");
     	
@@ -164,6 +202,12 @@ public class App  {
     
     private static String getAutomatonNameDisplay(String name) {
     	return (name.length() <= 30 ) ? name : name.substring(0, 26) + "..." ;
+    }
+    
+    private static void updateAutomatonDisplay(Automaton automaton, JLabel automatonNameLabel) {
+		String automatonName = automaton.getName();
+		automatonNameLabel.setText(getAutomatonNameDisplay(automatonName));
+		automatonNameLabel.setToolTipText(automatonName);
     }
     
     private static List<String> getListOfWordsFromFile(File file) {
