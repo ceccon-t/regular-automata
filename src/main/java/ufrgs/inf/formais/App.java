@@ -37,6 +37,7 @@ import ufrgs.inf.formais.helper.State;
 import ufrgs.inf.formais.helper.StateSymbolTuple;
 import ufrgs.inf.formais.helper.Symbol;
 import ufrgs.inf.formais.helper.Word;
+import ufrgs.inf.formais.storage.AutomataStorage;
 import ufrgs.inf.formais.storage.NFAeStorage;
 
 public class App  {
@@ -121,9 +122,9 @@ public class App  {
 				int returnValue = fileChooser.showOpenDialog(null);
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = fileChooser.getSelectedFile();
-					NFAeStorage nfaes = new NFAeStorage();
+					AutomataStorage storage = new AutomataStorage();
 					try {
-						automaton = nfaes.load(selectedFile);
+						automaton = storage.load(selectedFile);
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
