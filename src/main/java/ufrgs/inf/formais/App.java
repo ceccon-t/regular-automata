@@ -38,7 +38,6 @@ import ufrgs.inf.formais.helper.StateSymbolTuple;
 import ufrgs.inf.formais.helper.Symbol;
 import ufrgs.inf.formais.helper.Word;
 import ufrgs.inf.formais.storage.AutomataStorage;
-import ufrgs.inf.formais.storage.NFAeStorage;
 
 public class App  {
 	
