@@ -37,7 +37,6 @@ import ufrgs.inf.formais.helper.State;
 import ufrgs.inf.formais.helper.StateSymbolTuple;
 import ufrgs.inf.formais.helper.Symbol;
 import ufrgs.inf.formais.helper.Word;
-import ufrgs.inf.formais.storage.NFAStorage;
 import ufrgs.inf.formais.storage.NFAeStorage;
 
 public class App  {
@@ -138,17 +137,6 @@ public class App  {
     	
     	JButton convertToDfaBtn = new JButton("Convert to DFA");
     	convertToDfaBtn.addActionListener(new ActionListener() {
-    		/*
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (automaton instanceof NFA) {
-					automaton = AutomataConverter.nfaeToDfa((NFAe) automaton);
-					String automatonName = automaton.getName();
-					automatonNameLabel.setText(getAutomatonNameDisplay(automatonName));
-					automatonNameLabel.setToolTipText(automatonName);
-				}
-			}
-			*/
 			public void actionPerformed(ActionEvent e) {
 				if (automaton instanceof NFAe) {
 					automaton = AutomataConverter.nfaeToDfa((NFAe) automaton);
