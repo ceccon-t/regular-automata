@@ -72,8 +72,8 @@ public class App  {
 			}
     	});
     	
-    	JButton loadFileOfWords = new JButton("Load words");
-    	loadFileOfWords.addActionListener(new ActionListener() {
+    	JButton loadFileOfWordsBtn = new JButton("Load words");
+    	loadFileOfWordsBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				int returnValue = fileChooser.showOpenDialog(null);
@@ -81,6 +81,16 @@ public class App  {
 					File selectedFile = fileChooser.getSelectedFile();
 					loadListOfWordsIntoTable(wordsTable, getListOfWordsFromFile(selectedFile));
 				}
+			}
+    	});
+    	
+    	JButton clearWordsBtn = new JButton("Clear words");
+    	clearWordsBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				DefaultTableModel tableModel = (DefaultTableModel) wordsTable.getModel();
+				tableModel.getDataVector().removeAllElements();
+				tableModel.fireTableDataChanged();
 			}
     	});
     	
@@ -101,7 +111,8 @@ public class App  {
     	
     	topMainPanel.add(userInputField);
     	topMainPanel.add(addWordBtn);
-    	topMainPanel.add(loadFileOfWords);
+    	topMainPanel.add(loadFileOfWordsBtn);
+    	topMainPanel.add(clearWordsBtn);
     	topMainPanel.add(decideBtn);
     	
     	mainPanel.setLayout(new BorderLayout());
