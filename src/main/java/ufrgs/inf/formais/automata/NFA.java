@@ -14,6 +14,8 @@ public class NFA extends Automaton {
 
 	protected String type = "Non-Deterministic Finite Automaton";
 	
+	protected String shortType = "NFA";
+	
 	protected HashMap<StateSymbolTuple, HashSet<State>> transitionFunction;
 	
 	protected DFA deterministicEquivalent;
@@ -38,6 +40,10 @@ public class NFA extends Automaton {
 	
 	public String getType() {
 		return type;
+	}
+
+	public String getShortType() {
+		return shortType;
 	}
 
 	public HashMap<StateSymbolTuple, HashSet<State>> getTransitionFunction() {

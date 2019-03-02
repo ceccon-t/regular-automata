@@ -2,6 +2,8 @@ package ufrgs.inf.formais;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -127,7 +129,10 @@ public class App  {
     	
     	JLabel automatonNameLabel = new JLabel();
     	automatonNameLabel.setText(automaton.getName());
-    	automatonInfoPanel.add(automatonNameLabel);
+    	JLabel automatonShortTypeLabel = new JLabel();
+    	automatonShortTypeLabel.setText("Type: " + automaton.getShortType());
+    	JLabel automatonNumberOfStatesLabel = new JLabel();
+    	automatonNumberOfStatesLabel.setText("Number of states: " + automaton.getStates().size());
     	
     	JButton fileChooserBtn = new JButton("Load automaton");
     	fileChooserBtn.addActionListener(new ActionListener() {
@@ -142,9 +147,7 @@ public class App  {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-					String automatonName = automaton.getName();
-					automatonNameLabel.setText(getAutomatonNameDisplay(automatonName));
-					automatonNameLabel.setToolTipText(automatonName);
+					updateAutomatonDisplay(automaton, automatonNameLabel, automatonShortTypeLabel, automatonNumberOfStatesLabel);
 					cleanTableResults(wordsTable);
 				}
 			}
@@ -158,7 +161,7 @@ public class App  {
 				} else if(automaton instanceof NFA) {
 					automaton = AutomataConverter.nfaToDfa((NFA) automaton);
 				}
-				updateAutomatonDisplay(automaton, automatonNameLabel);
+				updateAutomatonDisplay(automaton, automatonNameLabel, automatonShortTypeLabel, automatonNumberOfStatesLabel);
 			}
     	});
     	
@@ -171,7 +174,7 @@ public class App  {
 				} else if (automaton instanceof NFAe) {
 					automaton = AutomataConverter.nfaeToNfa((NFAe) automaton);
 				}
-				updateAutomatonDisplay(automaton, automatonNameLabel);
+				updateAutomatonDisplay(automaton, automatonNameLabel, automatonShortTypeLabel, automatonNumberOfStatesLabel);
 			}
     	});
     	
@@ -184,7 +187,7 @@ public class App  {
 				} else if (automaton instanceof NFA && !(automaton instanceof NFAe)) {
 					automaton = AutomataConverter.nfaToNfae((NFA) automaton);
 				}
-				updateAutomatonDisplay(automaton, automatonNameLabel);
+				updateAutomatonDisplay(automaton, automatonNameLabel, automatonShortTypeLabel, automatonNumberOfStatesLabel);
 			}
     	});
     	
@@ -192,6 +195,14 @@ public class App  {
     	automatonOperationsPanel.add(convertToDfaBtn);
     	automatonOperationsPanel.add(convertToNfaBtn);
     	automatonOperationsPanel.add(convertToNfaeBtn);
+    	
+    	automatonInfoPanel.setLayout(new GridBagLayout());
+    	automatonInfoPanel.add(automatonNameLabel);
+    	GridBagConstraints infoPanelConstraints = new GridBagConstraints();
+    	infoPanelConstraints.gridy = 1;
+    	automatonInfoPanel.add(automatonShortTypeLabel, infoPanelConstraints);
+    	infoPanelConstraints.gridy = 2;
+    	automatonInfoPanel.add(automatonNumberOfStatesLabel, infoPanelConstraints);
     	
     	automatonPanel.setLayout(new BorderLayout());
     	automatonPanel.add(BorderLayout.NORTH, automatonOperationsPanel);
@@ -211,10 +222,12 @@ public class App  {
     	return (name.length() <= 100 ) ? name : name.substring(0, 96) + "..." ;
     }
     
-    private static void updateAutomatonDisplay(Automaton automaton, JLabel automatonNameLabel) {
+    private static void updateAutomatonDisplay(Automaton automaton, JLabel automatonNameLabel, JLabel automatonShortTypeLabel, JLabel automatonNumberOfStatesLabel) {
 		String automatonName = automaton.getName();
 		automatonNameLabel.setText(getAutomatonNameDisplay(automatonName));
 		automatonNameLabel.setToolTipText(automatonName);
+		automatonShortTypeLabel.setText("Type: " + automaton.getShortType());
+		automatonNumberOfStatesLabel.setText("Number of states: " + automaton.getStates().size());
     }
     
     private static List<String> getListOfWordsFromFile(File file) {

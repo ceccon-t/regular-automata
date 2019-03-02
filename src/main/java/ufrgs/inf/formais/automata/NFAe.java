@@ -16,6 +16,8 @@ public class NFAe extends NFA {
 	
 	protected String type = "Non-Deterministic Finite Automaton with epsilon transitions";
 	
+	protected String shortType = "NFAe";
+	
 	private HashMap<State, HashSet<State>> epsilonTransitions;
 	
 	public NFAe() {
@@ -42,6 +44,10 @@ public class NFAe extends NFA {
 		return type;
 	}
 	
+	public String getShortType() {
+		return shortType;
+	}
+
 	public HashMap<State, HashSet<State>> getEpsilonTransitions() {
 		return this.epsilonTransitions;
 	}

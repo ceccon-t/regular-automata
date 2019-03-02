@@ -11,6 +11,8 @@ public abstract class Automaton {
 
 	protected String type = "Automaton";
 	
+	protected String shortType = "FA";
+	
 	protected String name;
 	
 	protected HashSet<Symbol> alphabet;
@@ -23,6 +25,10 @@ public abstract class Automaton {
 
 	public String getType() {
 		return type;
+	}
+
+	public String getShortType() {
+		return shortType;
 	}
 
 	public String getName() {

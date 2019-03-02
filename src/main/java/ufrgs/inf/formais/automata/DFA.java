@@ -14,6 +14,8 @@ public class DFA extends Automaton{
 	
 	protected String type = "Deterministic Finite Automaton";
 	
+	protected String shortType = "DFA";
+	
 	private HashMap<StateSymbolTuple, State> transitionFunction;
 	
 	public DFA() {
@@ -36,6 +38,10 @@ public class DFA extends Automaton{
 
 	public String getType() {
 		return type;
+	}
+
+	public String getShortType() {
+		return shortType;
 	}
 
 	public HashMap<StateSymbolTuple, State> getTransitionFunction() {
