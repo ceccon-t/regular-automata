@@ -121,9 +121,13 @@ public class App  {
     	
     	// Bottom panel
     	JPanel automatonPanel = new JPanel();
+    	
+    	JPanel automatonOperationsPanel = new JPanel();
+    	JPanel automatonInfoPanel = new JPanel();
+    	
     	JLabel automatonNameLabel = new JLabel();
     	automatonNameLabel.setText(automaton.getName());
-    	automatonPanel.add(automatonNameLabel);
+    	automatonInfoPanel.add(automatonNameLabel);
     	
     	JButton fileChooserBtn = new JButton("Load automaton");
     	fileChooserBtn.addActionListener(new ActionListener() {
@@ -184,10 +188,14 @@ public class App  {
 			}
     	});
     	
-    	automatonPanel.add(fileChooserBtn);
-    	automatonPanel.add(convertToDfaBtn);
-    	automatonPanel.add(convertToNfaBtn);
-    	automatonPanel.add(convertToNfaeBtn);
+    	automatonOperationsPanel.add(fileChooserBtn);
+    	automatonOperationsPanel.add(convertToDfaBtn);
+    	automatonOperationsPanel.add(convertToNfaBtn);
+    	automatonOperationsPanel.add(convertToNfaeBtn);
+    	
+    	automatonPanel.setLayout(new BorderLayout());
+    	automatonPanel.add(BorderLayout.NORTH, automatonOperationsPanel);
+    	automatonPanel.add(BorderLayout.SOUTH, automatonInfoPanel);
     	
     	mainFrame.getContentPane().add(BorderLayout.CENTER, mainPanel);
     	mainFrame.getContentPane().add(BorderLayout.SOUTH, automatonPanel);
@@ -200,7 +208,7 @@ public class App  {
     }
     
     private static String getAutomatonNameDisplay(String name) {
-    	return (name.length() <= 30 ) ? name : name.substring(0, 26) + "..." ;
+    	return (name.length() <= 100 ) ? name : name.substring(0, 96) + "..." ;
     }
     
     private static void updateAutomatonDisplay(Automaton automaton, JLabel automatonNameLabel) {
