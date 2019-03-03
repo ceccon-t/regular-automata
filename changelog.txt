@@ -3,7 +3,7 @@ CHANGELOG
 List of features/changes introduced in each release.
 
 =============
-Current development
+Version 1.1.0
 ---
 - Added changelog
 - Standardization of format of files for automata
