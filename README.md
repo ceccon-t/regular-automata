@@ -1,7 +1,7 @@
 # Project
 Regular Automata is an application that allows the use of finite automata to express regular languages by checking if certain "words" belong to them. (More information about this area can be found [here](https://en.wikipedia.org/wiki/Automata_theory))
 
-It was developed as the final project for a college class on formal languages at UFRGS (Universidade Federal do Rio Grande do Sul) and is currently being expanded to encompass all the most basic functionality one would expect from these formalisms. It is not meant to be the most comprehensive nor the most efficient program to do that, but to be an example of a possible implementation of these concepts in a straightforward and hopefully understandable manner, using a language that allows the code to be very expressive - as well as a playground to implement certain non-trivial algorithms by hand. As such, the source code is left here in case it can help anyone who is studying this subject to have a better grasp of it, in an educational context.
+It was developed as the final project for a college class on formal languages at UFRGS (Universidade Federal do Rio Grande do Sul) and was later expanded to encompass the most basic functionality one would expect from these formalisms. It is not meant to be the most comprehensive nor the most efficient program to do that, but to be an example of a possible implementation of these concepts in a straightforward and hopefully understandable manner, using a language that allows the code to be very expressive - as well as a playground to implement certain non-trivial algorithms by hand. As such, the source code is left here in case it can help anyone who is studying this subject to have a better grasp of it, in an educational context.
 
 ## How to download
 
@@ -14,17 +14,14 @@ Since it is a [Maven](https://maven.apache.org/) project, assuming you have Mave
 After it has been built, a .jar with everything needed to run inside of it will be placed on the "target" directory. Just double clicking it or going to the root directory and running `java -jar ./target/RegularAutomata.jar` (on Linux, or its equivalent on Windows) will open the application.
 
 ## What is currently present
-As it stands now, the application works with DFAs and NFAs that can be loaded from correctly formatted files (more info below). It will always load the automaton as an NFA, which needs to be explicitly converted to a DFA before running words through it. The user can either enter words manually or load a list of them from a file.
+As it stands now, the application works with DFA, NFA and NFAe automata that can be loaded from correctly formatted files (more info below). It will always load the automaton as the most restrictive type it falls into between these three. It is then possible to convert to any other type. The user can either enter words manually or load a list of them from a file and run these words through the automaton, receiving as a result if the automaton recognizes or not each word.
 
 ## What is being developed
-Support for NFA with epsilon transition.
-
-Running words through any kind of automaton without the need to convert to a specific type.
-
-Display of more information about the automata.
+Nothing at the moment.
 
 ## What is not currently under consideration but would be cool to have
 Display of properties about the automata, such as if its recognized language is finite or infinite, if it is a minimal automaton, so on.
+A wizard-like interface to create automata in the application itself.
 
 ## File formats for automaton and list of words
 There are some files on `examples` folder of the formats the application expects. 
@@ -40,7 +37,7 @@ An automaton file should be in the following format, with no blank lines (and pr
 
 Prog
 
-(`state`,`symbol`)=`state` 		`(one or more lines in this format, defining the transition function)`
+(`state`,`symbol`)=`state` 		`(one or more lines defining the transition function, for epsilon transitions leave symbol empty)`
 
 
 Example:
@@ -61,5 +58,7 @@ Prog
 (q2,a)=q2
 
 (q3,a)=q3
+
+(q3,)=q2
 
 (q3,b)=q2
