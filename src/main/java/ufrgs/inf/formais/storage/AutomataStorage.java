@@ -10,11 +10,10 @@ import ufrgs.inf.formais.builders.AutomataConverter;
 
 public class AutomataStorage {
 	
-	public Automaton load(File file) throws IOException {
+	public static Automaton load(File file) throws IOException {
 		Automaton automaton;
 		
-		NFAeStorage nfaes = new NFAeStorage();
-		NFAe nfae = nfaes.load(file);
+		NFAe nfae = NFAeStorage.load(file);
 		String originalName = nfae.getName();
 		
 		if (nfae.hasNoEpsilonTransitions()) {

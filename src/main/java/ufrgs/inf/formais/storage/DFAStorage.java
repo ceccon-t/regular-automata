@@ -19,12 +19,12 @@ import ufrgs.inf.formais.helper.Symbol;
 
 public class DFAStorage {
 	
-	public void save(DFA dfa, String pathToSave) throws IOException {
+	public static void save(DFA dfa, String pathToSave) throws IOException {
 		String formattedDfa = toFileFormat(dfa);
 		Files.write(Paths.get(pathToSave), formattedDfa.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 	}
 	
-	public DFA load(File file) throws IOException  {
+	public static DFA load(File file) throws IOException  {
 		/*
 		 * Expects a dfa specification of the following format, on a text file:
 		 * 
@@ -87,7 +87,7 @@ public class DFAStorage {
 		return builder.build();
 	}
 	
-	private String toFileFormat(DFA dfa) {
+	private static String toFileFormat(DFA dfa) {
 		StringBuilder sb = new StringBuilder();
 		
 		// Name

@@ -20,12 +20,12 @@ import ufrgs.inf.formais.helper.Symbol;
 
 public class NFAStorage {
 	
-	public void save(NFA nfa, String pathToSave) throws IOException {
+	public static void save(NFA nfa, String pathToSave) throws IOException {
 		String formattedNfa = toFileFormat(nfa);
 		Files.write(Paths.get(pathToSave), formattedNfa.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
 	}
 	
-	public NFA load(File file) throws IOException {
+	public static NFA load(File file) throws IOException {
 		/*
 		 * Expects a nfa specification of the following format, on a text file:
 		 * 
@@ -103,7 +103,7 @@ public class NFAStorage {
 		return builder.build();
 	}
 
-	private String toFileFormat(NFA nfa) {
+	private static String toFileFormat(NFA nfa) {
 		StringBuilder sb = new StringBuilder();
 		
 		// Name

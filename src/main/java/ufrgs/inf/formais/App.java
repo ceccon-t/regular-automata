@@ -141,9 +141,8 @@ public class App  {
 				int returnValue = fileChooser.showOpenDialog(null);
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = fileChooser.getSelectedFile();
-					AutomataStorage storage = new AutomataStorage();
 					try {
-						automaton = storage.load(selectedFile);
+						automaton = AutomataStorage.load(selectedFile);
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
