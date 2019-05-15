@@ -2,7 +2,7 @@ package ufrgs.inf.formais.helper;
 
 public class Symbol {
 	
-	String representation;
+	private String representation;
 	
 	public Symbol(String representation) {
 		this.representation = representation;
@@ -12,10 +12,6 @@ public class Symbol {
 		return representation;
 	}
 
-	public void setRepresentation(String representation) {
-		this.representation = representation;
-	}
-	
 	@Override
 	public boolean equals(Object o) {
 		return (o instanceof Symbol) ? this.representation.equals( ((Symbol)o).getRepresentation() ) : false;
